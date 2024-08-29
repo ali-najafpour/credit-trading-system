@@ -36,30 +36,45 @@ class ReduceFromCart extends Controller
             ->first();
 
         if($item){
-            // Check item count + $count with updated product total count:
-            if($product->total_count < $item->count - $count){
-                $item->count = $product->total_count;
-                $item->save();
+
+            if($item->count > $count){
+                // Check item count + $count with updated product total count:
+                if($product->total_count < $item->count - $count){
+                    $item->count = $product->total_count;
+                    $item->save();
+
+                    $cart->load('user','cartItems','cartItems.product');
+
+                    return Responser::success([
+                        'Warning',
+                        'The quantity of this item has updated in your cart.',
+                        CartResource::make($cart),
+                    ]);
+
+                }else{
+                    $item->count -= $count;
+                    $item->save();
+
+                    $cart->load('user','cartItems','cartItems.product');
+
+                    return Responser::success([
+                        null,
+                        null,
+                        CartResource::make($cart),
+                    ]);
+                }
+            }elseif($item->count == $count){
+                $item->delete();
 
                 $cart->load('user','cartItems','cartItems.product');
 
                 return Responser::success([
                     'Warning',
-                    'The quantity of this item has updated in your cart.',
+                    'Item removed from cart.',
                     CartResource::make($cart),
                 ]);
-
             }else{
-                $item->count -= $count;
-                $item->save();
-
-                $cart->load('user','cartItems','cartItems.product');
-
-                return Responser::success([
-                    null,
-                    null,
-                    CartResource::make($cart),
-                ]);
+                return Responser::error(['Error' => 'Invalid count.']);
             }
 
         }else{

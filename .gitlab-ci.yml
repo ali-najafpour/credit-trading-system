@@ -1,0 +1,31 @@
+stages:
+  - deploy
+
+# -----------------------    deploy stage    -----------------------
+deploy-staging:
+  variables:
+    GIT_STRATEGY: none
+  image:
+    name: kroniak/ssh-client
+    pull_policy: if-not-present #always
+  stage: deploy
+  before_script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$DEPLOYER_SSH_STAGING_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
+  script:
+    - |
+      ssh deployer@#### "\
+      cd /home/deployer/test-back && git pull && \
+      sudo docker build -t test-back:latest . && \
+      sudo docker build -t test-back-nginx:latest -f Dockerfile.nginx . && \
+      cd /home/deployer/apps/test-back-staging && \
+      sudo docker compose up -d && \
+      sudo docker exec test-back-staging_php php artisan optimize && \
+      sudo docker exec test-back-staging_php php artisan migrate --force && \
+      sudo docker exec test-back-staging_php php artisan db:seed && \
+      exit"
+  only:
+    - dev

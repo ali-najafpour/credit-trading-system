@@ -1,0 +1,7 @@
+FROM nginx:1.21-alpine
+
+COPY . /var/www/html
+
+WORKDIR /var/www/html
+
+RUN cd public/ && ln -s ../storage/app/public storage

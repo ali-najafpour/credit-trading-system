@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Services\Responser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\Notification\SendNotificationJob;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Requests\Product\StoreProductRequest;
 
@@ -22,7 +23,12 @@ class StoreProduct extends Controller
 
         $product = Product::query()->with('creator')->find($product->id);
 
-        // notification to manager| mail
+        // Send notification to managers:
+        $message = trans('messages.notifications.product.store');
+        $notif_data = ProductResource::make($product)->resolve();
+
+        SendNotificationJob::dispatch($message, null, 'manager', 'mail', $notif_data)->onQueue('notifications');
+
         return Responser::success(null, null, ProductResource::make($product));
     }
 }

@@ -51,4 +51,10 @@ return [
     'participant_with_no_published_video_exists' => 'Operation Not Allowed; at least one participant has no published video.',
     'active_stage_should_be_published' => 'Conflict; the active stage should be published.',
     'end_date_is_passed' => 'Conflict; the end_date is passed. If you want to activate you should change its end_date.',
+
+    'notifications' => [
+        'product' => [
+            "store" => "New product added."
+        ]
+    ],
 ];

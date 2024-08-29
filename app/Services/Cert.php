@@ -7,30 +7,23 @@ class Cert
 {
     public function user()
     {
-        if (auth('api')->check()) {
-            return auth('api')->user();
+        if (auth()->check()) {
+            return auth()->user();
         }
         return null;
 
     }
     public function check()
     {
-        if (auth('api')->check()) {
+        if (auth()->check()) {
             return true;
         }
         return false;
     }
     public function userId()
     {
-        if (auth('api')->check()) {
-            return auth('api')->user()->id;
-        }
-        return false;
-    }
-    public function isAdmin()
-    {
-        if (auth('api')->check()) {
-            return auth('api')->user()->hasRole('manager');
+        if (auth()->check()) {
+            return auth()->user()->id;
         }
         return false;
     }

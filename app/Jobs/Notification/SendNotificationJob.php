@@ -73,7 +73,7 @@ class SendNotificationJob implements ShouldQueue
 
         $to_users = User::query()->whereIn('id',$to_users)->isActive()->get();
 
-        Notification::sendNow($to_users, new ProductStoredNotification($message,$channel,$data));
+        Notification::send($to_users, new ProductStoredNotification($message,$channel,$data));
 
     }
 }

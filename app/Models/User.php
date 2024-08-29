@@ -6,6 +6,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Traits\OrderByIdTrait;
+use App\Traits\BasicModelTrait;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\QueryException;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, SearchableTrait, OrderByIdTrait, SoftDeletes;
+    use HasFactory, Notifiable, HasApiTokens, BasicModelTrait, SearchableTrait, OrderByIdTrait, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

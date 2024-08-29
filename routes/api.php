@@ -13,6 +13,10 @@ Route::middleware('xss')->group(function () {
         Route::post('auth/login', 'Login');
     });
 
+    Route::namespace('Product')->group(function () {
+        Route::get('product/list', 'IndexProduct');
+    });
+
     Route::middleware('auth:api')->group(function () {
         Route::namespace('Auth')->group(function () {
             Route::get('auth/my-profile', 'ShowMyProfile');

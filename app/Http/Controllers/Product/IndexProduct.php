@@ -18,6 +18,7 @@ class IndexProduct extends Controller
             ->filtered()
             ->isVisible()
             ->isActive()
+            // ->with('creator')
             ->paginate();
 
         return ProductResource::collection($products);

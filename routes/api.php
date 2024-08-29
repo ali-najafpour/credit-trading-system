@@ -22,8 +22,10 @@ Route::middleware('xss')->group(function () {
             Route::get('auth/my-profile', 'ShowMyProfile');
         });
 
-        Route::middleware('role:manger,admin')->group(function () {
-
+        Route::middleware('role:manager,admin')->group(function () {
+            Route::namespace('Product\Admin')->group(function () {
+                Route::post('product/admin/add', 'StoreProduct');
+            });
         });
 
         Route::middleware('role:manager')->group(function () {

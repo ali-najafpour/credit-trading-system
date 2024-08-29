@@ -42,7 +42,7 @@ class Product extends Model
 
     public function creator()
     {
-        $this->belongsTo(User::class, 'creator_id');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function isActive()
